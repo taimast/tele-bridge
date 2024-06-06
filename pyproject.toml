@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "tele-bridge"
+version = "0.1.0"
+description = ""
+authors = ["taimast <charlskenno@gmail.com>"]
+readme = "README.md"
+packages = [
+    { include = "src" }
+]
+[tool.poetry.dependencies]
+python = "^3.11"
+pyrogram = {url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.21.zip"}
+tgcrypto = "^1.2.5"
+telethon = "^1.35.0"
+cryptg = "^0.4.0"
+loguru = "^0.7.2"
+pydantic = "^2.7.2"
+cachetools = "^5.3.3"
+asyncache = "^0.3.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
