@@ -1,0 +1,1 @@
+# todo L1 TODO 08.06.2024 22:04 taima: Add fast get api datas from request

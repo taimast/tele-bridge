@@ -1,13 +1,18 @@
+from __future__ import annotations
+
+import typing
 from typing import Callable, Any, Awaitable
 
 from loguru import logger
 
-from .tele.client import TelethonClient
+if typing.TYPE_CHECKING:
+    from .tele.client import TelethonClient
+    from .pyro.client import PyrogramClient
 
 
 class BaseDispatcher:
 
-    def __init__(self, client: TelethonClient):
+    def __init__(self, client: TelethonClient | PyrogramClient):
         self.client = client
 
     async def __aenter__(self):

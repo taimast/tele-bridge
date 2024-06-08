@@ -1,8 +1,13 @@
+from __future__ import annotations
+
 import base64
+import contextlib
 import struct
 from dataclasses import dataclass
 
 from pyrogram.storage import MemoryStorage
+
+from src.bases.account import AccountProtocol
 
 
 @dataclass
@@ -47,3 +52,24 @@ def parse_pyrogram_session(session_string: str):
             user_id=user_id,
             is_bot=is_bot
         )
+
+
+def raise_exception():
+    raise Exception("Phone code required")
+
+
+@contextlib.asynccontextmanager
+async def get_not_updates_telethon_client(account: AccountProtocol):
+    from ..tele.client import TelethonClient
+    api_id, api_hash = account.get_api_data()
+    async with TelethonClient(
+            api_id=api_id,
+            api_hash=api_hash,
+            phone_number=account.phone_number,
+            phone_code=raise_exception,
+            session_string=account.session_string,
+            is_pyrogram_session=True,
+            in_memory=True,
+            receive_updates=False
+    ) as client:
+        yield client

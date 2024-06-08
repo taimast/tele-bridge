@@ -22,6 +22,15 @@ class PyrogramClient(_Client, SetAttribute):
     def has_handlers(self):
         return bool(self.dispatcher.groups)
 
+    async def stop(
+            self: "PyrogramClient",
+            block: bool = True
+    ):
+        try:
+            await super().stop(block)
+        except ConnectionError:
+            pass
+
     def __init__(
             self,
             api_id: int,
@@ -52,7 +61,7 @@ class PyrogramClient(_Client, SetAttribute):
             password=password,
             proxy=proxy,
             parse_mode=ParseMode.HTML,
-            app_version="AutoAnswersBot 5.2.1",
+            app_version="RedirectBot v2",
             device_model="Linux",
             system_version="6.1",
             **kwargs

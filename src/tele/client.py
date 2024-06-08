@@ -11,11 +11,12 @@ from telethon import utils, errors
 from telethon.crypto import AuthKey
 from telethon.sessions import StringSession
 
-from src.account_dispatcher.bases.mixins import Autofill, SetAttribute
-from src.account_dispatcher.bases.proxy import ProxyType, Proxy
-from src.account_dispatcher.tele.utils import parse_pyrogram_session
+from src.bases.mixins import Autofill, SetAttribute
+from src.bases.proxy import ProxyType, Proxy
+from src.tele.utils import parse_pyrogram_session
 
 SESSIONS_DIR = Path("sessions")
+
 
 def raise_exception():
     raise Exception("Phone code or password is required")
@@ -84,6 +85,9 @@ class TelethonClient(TelegramClient, SetAttribute):
             api_id,
             api_hash,
             proxy=proxy,
+            app_version="RedirectBot v2",
+            device_model="Linux",
+            system_version="6.1",
             **kwargs
         )
 
