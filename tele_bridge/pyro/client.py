@@ -39,6 +39,9 @@ class PyrogramClient(_Client, SetAttribute):
             phone_number: Autofill = None,
             phone_code: Autofill = None,
             password: Autofill = None,
+            phone_number_error: Autofill = None,
+            phone_code_error: Autofill = None,
+            password_error: Autofill = None,
             proxy: ProxyType = None,
             set_attr_timeout: int = 60,
             is_pyrogram_session: bool = False,
@@ -51,6 +54,9 @@ class PyrogramClient(_Client, SetAttribute):
         self._set_attr_timeout = set_attr_timeout
         self.is_pyrogram_session = is_pyrogram_session
         self.is_telethon_session = is_telethon_session
+        self.phone_number_error = phone_number_error
+        self.phone_code_error = phone_code_error
+        self.password_error = password_error
         super().__init__(
             name,
             api_id,
@@ -102,7 +108,9 @@ class PyrogramClient(_Client, SetAttribute):
 
                 sent_code = await self.send_code(self.phone_number)
             except BadRequest as e:
-                print(e.MESSAGE)
+                await self.phone_number_error(e.MESSAGE)
+                logger.error(e.MESSAGE)
+
                 self.phone_number = None
                 self.bot_token = None
             else:
@@ -125,10 +133,12 @@ class PyrogramClient(_Client, SetAttribute):
             try:
                 signed_in = await self.sign_in(self.phone_number, sent_code.phone_code_hash, self.phone_code)
             except BadRequest as e:
-                print(e.MESSAGE)
+                logger.error(e.MESSAGE)
+                await self.phone_code_error(e.MESSAGE)
+
                 self.phone_code = await self.set_unfilled_attribute("phone_code")
             except SessionPasswordNeeded as e:
-                print(e.MESSAGE)
+                logger.warning(e.MESSAGE)
 
                 while True:
                     print("Password hint: {}".format(await self.get_password_hint()))
@@ -159,7 +169,8 @@ class PyrogramClient(_Client, SetAttribute):
                         else:
                             return await self.check_password(self.password)
                     except BadRequest as e:
-                        print(e.MESSAGE)
+                        logger.error(e.MESSAGE)
+                        self.password_error(e.MESSAGE)
                         self.password = await self.set_unfilled_attribute("password")
             else:
                 break
@@ -188,3 +199,4 @@ class PyrogramClient(_Client, SetAttribute):
             await self.accept_terms_of_service(signed_in.id)
 
         return signed_up
+
