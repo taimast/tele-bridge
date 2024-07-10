@@ -1,4 +1,5 @@
 from .base import BaseDispatcher
+from .dispatcher import Dispatcher
 
 from .bases.client_object import ClientObject
 from .bases.message import MessageObject
@@ -19,6 +20,7 @@ from .tele.try_get import TelethonChatGetterTry
 
 __all__ = (
     "BaseDispatcher",
+    "Dispatcher",
     "ClientObject",
     "MessageObject",
     "Proxy",
