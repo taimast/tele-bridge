@@ -5,8 +5,8 @@ from typing import Type
 
 from aiogram import types as aiogram_types
 
-from src.bases.message import MessageObject
-from src.bases.try_get import ChatGetterTry
+from tele_bridge.bases.message import MessageObject
+from tele_bridge.bases.try_get import ChatGetterTry
 
 
 class ClientObject(abc.ABC):

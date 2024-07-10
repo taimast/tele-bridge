@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from pyrogram import types as pyro_types
 from pyrogram.types import Message as PyrogramMessage
 
-from src.bases.message import MessageObject
+from tele_bridge.bases.message import MessageObject
 
 
 class PyrogramMessageObject(MessageObject):

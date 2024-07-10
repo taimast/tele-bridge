@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import contextlib
 
-from src import PyrogramClient
-from src.bases.account import AccountProtocol
+from tele_bridge import PyrogramClient
+from tele_bridge.bases.account import AccountProtocol
 
 
 def raise_exception():

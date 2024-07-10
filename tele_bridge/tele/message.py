@@ -15,7 +15,7 @@ from telethon.tl.types import (
     User, MessageReplyHeader
 )
 
-from src.bases.message import MessageObject
+from tele_bridge.bases.message import MessageObject
 
 
 class TelethonMessageObjectMixin:

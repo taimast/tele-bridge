@@ -7,10 +7,10 @@ from aiogram.types import BufferedInputFile
 from loguru import logger
 from pyrogram import enums as pyro_enums
 
-from src import PyrogramClient
-from src.bases.client_object import ClientObject
-from src.pyro.message import PyrogramMessageObject
-from src.pyro.try_get import PyrogramChatGetterTry
+from tele_bridge import PyrogramClient
+from tele_bridge.bases.client_object import ClientObject
+from tele_bridge.pyro.message import PyrogramMessageObject
+from tele_bridge.pyro.try_get import PyrogramChatGetterTry
 
 
 class PyrogramClientInterface(ClientObject):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from src.bases.try_get import ChatGetterTry
-from src.pyro.message import PyrogramMessageObject
+from tele_bridge.bases.try_get import ChatGetterTry
+from tele_bridge.pyro.message import PyrogramMessageObject
 
 
 class PyrogramChatGetterTry(ChatGetterTry):

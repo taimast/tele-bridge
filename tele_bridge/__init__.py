@@ -1,4 +1,4 @@
-from src.pyro.client import Autofill, PyrogramClient
+from tele_bridge.pyro.client import Autofill, PyrogramClient
 from .base import BaseDispatcher
 from .bases.proxy import ProxyType, Proxy, ProxyDict
 from .dispatcher import Dispatcher
@@ -11,7 +11,6 @@ __all__ = (
     "TelethonClient",
     "Dispatcher",
     "Methods",
-    "RegisterDispatcher",
 
     "Proxy",
     "ProxyDict",

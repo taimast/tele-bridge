@@ -11,9 +11,9 @@ from telethon import utils, errors
 from telethon.crypto import AuthKey
 from telethon.sessions import StringSession
 
-from src.bases.mixins import Autofill, SetAttribute
-from src.bases.proxy import ProxyType, Proxy
-from src.tele.utils import parse_pyrogram_session
+from tele_bridge.bases.mixins import Autofill, SetAttribute
+from tele_bridge.bases.proxy import ProxyType, Proxy
+from tele_bridge.tele.utils import parse_pyrogram_session
 
 SESSIONS_DIR = Path("sessions")
 

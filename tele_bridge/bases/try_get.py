@@ -3,7 +3,7 @@ from __future__ import annotations
 import abc
 import typing
 
-from src.bases.message import MessageObject
+from tele_bridge.bases.message import MessageObject
 
 
 class ChatGetterTry(abc.ABC):

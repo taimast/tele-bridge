@@ -4,9 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["taimast <charlskenno@gmail.com>"]
 readme = "README.md"
-packages = [
-    { include = "src" }
-]
+
 [tool.poetry.dependencies]
 python = "^3.11"
 pyrogram = {url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.21.zip"}

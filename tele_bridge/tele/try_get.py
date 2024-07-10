@@ -6,8 +6,8 @@ from cachetools import TTLCache
 from loguru import logger
 from telethon.errors import ChannelPrivateError
 
-from src.bases.try_get import ChatGetterTry
-from src.tele.message import TelethonMessageObject
+from tele_bridge.bases.try_get import ChatGetterTry
+from tele_bridge.tele.message import TelethonMessageObject
 
 UserID = ChatID = int
 GET_CHAT_ERRORS_BLOCKED_DISPATCHERS = TTLCache(maxsize=1000, ttl=60 * 3)

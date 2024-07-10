@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from pyrogram.storage import MemoryStorage
 
-from src.bases.account import AccountProtocol
+from tele_bridge.bases.account import AccountProtocol
 
 
 @dataclass

@@ -6,10 +6,10 @@ from aiogram import types as aiogram_types
 from telethon.tl.custom import Message as TelethonMessage
 from telethon.tl.types import MessageMediaPhoto, MessageMediaDocument
 
-from src import TelethonClient
-from src.bases.client_object import ClientObject
-from src.tele.message import TelethonMessageObject
-from src.tele.try_get import TelethonChatGetterTry
+from tele_bridge import TelethonClient
+from tele_bridge.bases.client_object import ClientObject
+from tele_bridge.tele.message import TelethonMessageObject
+from tele_bridge.tele.try_get import TelethonChatGetterTry
 
 
 class TelethonClientInterface(ClientObject):

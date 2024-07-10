@@ -5,8 +5,8 @@ from configparser import ConfigParser
 
 from loguru import logger
 
-from src.api_data import TGData
-from src.json_proxy import JSONProxy
+from tele_bridge.api_data import TGData
+from tele_bridge.json_proxy import JSONProxy
 
 config = ConfigParser()
 config.read('config.ini')
