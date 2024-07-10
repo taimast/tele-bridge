@@ -1,19 +1,37 @@
-from tele_bridge.pyro.client import Autofill, PyrogramClient
 from .base import BaseDispatcher
-from .bases.proxy import ProxyType, Proxy, ProxyDict
-from .dispatcher import Dispatcher
-from .methods import Methods
-from .tele.client import TelethonClient
+
+from .bases.client_object import ClientObject
+from .bases.message import MessageObject
+from .bases.proxy import Proxy, ProxyDict, ProxyType
+from .bases.try_get import ChatGetterTry
+
+from .methods import Methods, CachedMethods
+
+from .pyro.client import Autofill, PyrogramClient
+from .pyro.client_object import PyrogramClientInterface
+from .pyro.message import PyrogramMessageObject
+from .pyro.try_get import PyrogramChatGetterTry
+
+from .tele.client import Autofill, TelethonClient
+from .tele.client_object import TelethonClientInterface
+from .tele.message import TelethonMessageObject
+from .tele.try_get import TelethonChatGetterTry
 
 __all__ = (
     "BaseDispatcher",
-    "PyrogramClient",
-    "TelethonClient",
-    "Dispatcher",
-    "Methods",
-
+    "ClientObject",
+    "MessageObject",
     "Proxy",
     "ProxyDict",
     "ProxyType",
-    "Autofill",
+    "ChatGetterTry",
+    "CachedMethods",
+    "PyrogramClient",
+    "PyrogramClientInterface",
+    "PyrogramMessageObject",
+    "PyrogramChatGetterTry",
+    "TelethonClient",
+    "TelethonClientInterface",
+    "TelethonMessageObject",
+    "TelethonChatGetterTry",
 )
