@@ -67,7 +67,7 @@ class PyrogramClient(_Client, SetAttribute):
             password=password,
             proxy=proxy,
             parse_mode=ParseMode.HTML,
-            app_version="RedirectBot v2",
+            app_version="TeleBridge v2",
             device_model="Linux",
             system_version="6.1",
             **kwargs
