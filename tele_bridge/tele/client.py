@@ -1,19 +1,16 @@
-import ipaddress
 import sys
 import typing
 import warnings
 from functools import partial
 from pathlib import Path
 
-from pyrogram.session.internals.data_center import DataCenter
 from telethon import TelegramClient, events
 from telethon import utils, errors
-from telethon.crypto import AuthKey
 from telethon.sessions import StringSession
 
 from tele_bridge.bases.mixins import Autofill, SetAttribute
 from tele_bridge.bases.proxy import ProxyType, Proxy
-from tele_bridge.tele.utils import parse_pyrogram_session
+from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
 
 SESSIONS_DIR = Path("sessions")
 
@@ -51,6 +48,9 @@ class TelethonClient(TelegramClient, SetAttribute):
             set_attr_timeout: int = 60,
             is_pyrogram_session: bool = False,
             is_telethon_session: bool = False,
+            app_version="TeleBridge v2",
+            device_model="Linux",
+            system_version="6.1",
             **kwargs
     ):
         proxy: tuple = Proxy.from_url(proxy).to_telethon_proxy() if proxy else None
@@ -65,16 +65,8 @@ class TelethonClient(TelegramClient, SetAttribute):
         self.is_telethon_session = is_telethon_session
 
         if is_pyrogram_session:
-            pyro_info = parse_pyrogram_session(session_string)
-            server_address, port = DataCenter(
-                pyro_info.dc_id, False, False, False
-            )
-            # ip = ipaddress.ip_address(server_address).packed
-            session = StringSession()
-            session._dc_id = pyro_info.dc_id
-            session._port = port
-            session._auth_key = AuthKey(pyro_info.auth_key)
-            session._server_address = ipaddress.ip_address(server_address).compressed
+            tl_session = TeleBridgeSession.from_pyrogram_string(session_string)
+            session = StringSession(tl_session.session_string)
         elif in_memory:
             session = StringSession(session_string)
         else:
@@ -85,9 +77,9 @@ class TelethonClient(TelegramClient, SetAttribute):
             api_id,
             api_hash,
             proxy=proxy,
-            app_version="TeleBridge v2",
-            device_model="Linux",
-            system_version="6.1",
+            app_version=app_version,
+            device_model=device_model,
+            system_version=system_version,
             **kwargs
         )
 

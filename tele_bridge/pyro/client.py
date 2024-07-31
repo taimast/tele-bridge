@@ -12,6 +12,7 @@ from pyrogram.utils import ainput
 from loguru import logger
 from tele_bridge.bases.mixins import Autofill, SetAttribute
 from tele_bridge.bases.proxy import Proxy, ProxyType
+from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
 
 
 class PyrogramClient(_Client, SetAttribute):
@@ -46,6 +47,9 @@ class PyrogramClient(_Client, SetAttribute):
             set_attr_timeout: int = 60,
             is_pyrogram_session: bool = False,
             is_telethon_session: bool = False,
+            app_version="TeleBridge v2",
+            device_model="Linux",
+            system_version="6.1",
             **kwargs
     ):
         name = f"{api_id}_{phone_number}"
@@ -57,6 +61,11 @@ class PyrogramClient(_Client, SetAttribute):
         self.phone_number_error = phone_number_error
         self.phone_code_error = phone_code_error
         self.password_error = password_error
+
+        if is_telethon_session:
+            tl_session = TeleBridgeSession.from_telethon_string(session_string)
+            session_string = tl_session.to_pyrogram_string()
+
         super().__init__(
             name,
             api_id,
@@ -67,9 +76,9 @@ class PyrogramClient(_Client, SetAttribute):
             password=password,
             proxy=proxy,
             parse_mode=ParseMode.HTML,
-            app_version="TeleBridge v2",
-            device_model="Linux",
-            system_version="6.1",
+            app_version=app_version,
+            device_model=device_model,
+            system_version=system_version,
             **kwargs
         )
 

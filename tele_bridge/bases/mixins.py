@@ -18,6 +18,9 @@ class SetAttribute:
     #     self._attribute_cache = {}
     #     self._set_attr_timeout = set_attr_timeout
 
+    _set_attr_timeout: int
+    _attribute_cache: dict[str, Any]
+
     async def set_unfilled_attribute(self, attr_name: str) -> ClientValue | None:
         async with asyncio.timeout(self._set_attr_timeout):
             return await self._set_unfilled_attribute(attr_name)

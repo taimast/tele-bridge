@@ -74,7 +74,7 @@ class TeleBridgeSession:
             port=session._port,
         )
 
-    def to_telethon_session_string(self):
+    def to_telethon_string(self):
         from telethon.sessions import StringSession
         from telethon.crypto import AuthKey
 
@@ -85,7 +85,7 @@ class TeleBridgeSession:
         session._server_address = ipaddress.ip_address(self.ip).compressed
         return session.save()
 
-    def to_pyrogram_session_string(self):
+    def to_pyrogram_string(self):
         from pyrogram.storage import MemoryStorage
 
         packed = struct.pack(
