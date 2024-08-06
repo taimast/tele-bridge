@@ -17,8 +17,8 @@ class TeleBridgeSession:
 
     is_bot: bool = False
     test_mode: bool = False
-    user_id: int | None = None
-    api_id: int | None = None
+    user_id: int = 0
+    api_id: int = 0
 
     @classmethod
     def from_pyrogram_string(cls, session_string: str):
@@ -36,7 +36,7 @@ class TeleBridgeSession:
             )
             return cls(
                 dc_id=dc_id,
-                api_id=None,
+                api_id=0,
                 test_mode=test_mode,
                 auth_key=auth_key,
                 user_id=user_id,
@@ -101,3 +101,14 @@ class TeleBridgeSession:
 
     def base64_auth_key(self):
         return base64.urlsafe_b64encode(self.auth_key).decode('ascii')
+
+
+def main():
+    tele_session_string = "1ApWapzMBu4ia1ice543QRrQwiRtrwvgN5J7SXE7WwCE6iFVrBjrUdwkE4n0ZzQ7QMkr3KlXXdgpF_2ci6moeTrpRI1gctRBghOolSYHOBa51R2Wql2IQ2mPBES10ZJXNivDqbIvGimDqfoEy9oaTi7q-MCoxufKjqopbtTBRuiFyItylb9-bE6EmQlAj_xLdpg4WBHdAhQUo15hhk_yM_oytE4fYj2f3cmzAjt2crDHoz2oPk5wc38i20RYTshgtvobnWDKkKmxdLVvkXva8RIvEz08A-6CdXyu1cegRMSG9Dy5uuUYhr0IMc9mgvcCpfbuESHnE-iu2ZC4eeNVaqIaW8Y3RCYc="
+    tele_session = TeleBridgeSession.from_telethon_string(tele_session_string)
+    print(tele_session)
+    pyro_session_string = tele_session.to_pyrogram_string()
+    print(pyro_session_string)
+
+if __name__ == '__main__':
+    main()
