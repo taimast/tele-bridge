@@ -6,7 +6,7 @@ authors = ["taimast <charlskenno@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 pyrogram = {url = "https://github.com/KurimuzonAkuma/pyrogram/archive/v2.1.21.zip"}
 tgcrypto = "^1.2.5"
 telethon = "^1.35.0"
