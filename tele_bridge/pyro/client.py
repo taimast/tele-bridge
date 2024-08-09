@@ -1,6 +1,7 @@
 from typing import Awaitable, Callable, Any
 
-from pyrogram import Client as _Client
+from loguru import logger
+from pyrogram import Client
 from pyrogram import enums
 from pyrogram import filters
 from pyrogram.client import log
@@ -9,13 +10,13 @@ from pyrogram.errors import BadRequest, SessionPasswordNeeded
 from pyrogram.handlers import MessageHandler
 from pyrogram.types import TermsOfService, User
 from pyrogram.utils import ainput
-from loguru import logger
-from tele_bridge.bases.mixins import Autofill, SetAttribute
-from tele_bridge.bases.proxy import Proxy, ProxyType
-from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
+
+from tele_bridge.bases.client import BaseClient
+from tele_bridge.bases.client_params import ClientOpts
+from tele_bridge.bases.proxy import Proxy
 
 
-class PyrogramClient(_Client, SetAttribute):
+class PyrogramClient(Client, BaseClient):
 
     def add_message_handler(self, handler: Callable[[Any, Any], Awaitable[Any]]):
         self.add_handler(MessageHandler(handler), filters.incoming)
@@ -34,61 +35,37 @@ class PyrogramClient(_Client, SetAttribute):
 
     def __init__(
             self,
-            api_id: int,
-            api_hash: str,
-            session_string: str = None,
-            phone_number: Autofill = None,
-            phone_code: Autofill = None,
-            password: Autofill = None,
-            phone_number_error: Autofill = None,
-            phone_code_error: Autofill = None,
-            password_error: Autofill = None,
-            proxy: ProxyType = None,
-            set_attr_timeout: int = 60,
-            is_pyrogram_session: bool = False,
-            is_telethon_session: bool = False,
-            app_version="TeleBridge v2",
-            device_model="Linux",
-            system_version="6.1",
+            opts: ClientOpts,
             **kwargs
     ):
-        name = f"{api_id}_{phone_number}"
-        proxy: dict = Proxy.parse_proxy(proxy) if proxy else None
-        self._attribute_cache = {}
-        self._set_attr_timeout = set_attr_timeout
-        self.is_pyrogram_session = is_pyrogram_session
-        self.is_telethon_session = is_telethon_session
-        self.phone_number_error = phone_number_error
-        self.phone_code_error = phone_code_error
-        self.password_error = password_error
+        BaseClient.__init__(self, opts=opts)
 
-        if is_telethon_session:
-            tl_session = TeleBridgeSession.from_telethon_string(session_string)
-            session_string = tl_session.to_pyrogram_string()
+        name = f"{opts.api_id}_{opts.phone_number}"
+        proxy: dict = Proxy.parse_proxy(opts.proxy) if opts.proxy else None
+
+        session_string = None
+        if opts.session_bridge:
+            session_string = opts.session_bridge.to_pyrogram_string()
 
         super().__init__(
             name,
-            api_id,
-            api_hash,
+            opts.api_id,
+            opts.api_hash,
             session_string=session_string,
-            phone_number=phone_number,
-            phone_code=phone_code,
-            password=password,
+            phone_number=opts.phone_number,
+            phone_code=opts.phone_code,
+            password=opts.password,
             proxy=proxy,
             parse_mode=ParseMode.HTML,
-            app_version=app_version,
-            device_model=device_model,
-            system_version=system_version,
+            in_memory=opts.in_memory,
+            no_updates=not opts.receive_updates,
+
+            app_version=opts.app_version,
+            device_model=opts.device_model,
+            system_version=opts.system_version,
             **kwargs
         )
 
-    async def handle_updates(self, updates):
-        try:
-            await super().handle_updates(updates)
-        except Exception:
-            # fixme L5 11.10.2023 19:22 taima: Переписать все это на rust нахуй
-            pass
-            # logger.warning(f"[handle_updates] {e}")
 
     async def authorize(self) -> User:
         if self.bot_token:
@@ -208,4 +185,3 @@ class PyrogramClient(_Client, SetAttribute):
             await self.accept_terms_of_service(signed_in.id)
 
         return signed_up
-

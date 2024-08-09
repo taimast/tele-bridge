@@ -6,11 +6,11 @@ from pathlib import Path
 
 from telethon import TelegramClient, events
 from telethon import utils, errors
-from telethon.sessions import StringSession
+from telethon.sessions import StringSession, MemorySession
 
-from tele_bridge.bases.mixins import Autofill, SetAttribute
-from tele_bridge.bases.proxy import ProxyType, Proxy
-from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
+from tele_bridge.bases.client import BaseClient
+from tele_bridge.bases.client_params import ClientOpts
+from tele_bridge.bases.proxy import Proxy
 
 SESSIONS_DIR = Path("sessions")
 
@@ -19,7 +19,7 @@ def raise_exception():
     raise Exception("Phone code or password is required")
 
 
-class TelethonClient(TelegramClient, SetAttribute):
+class TelethonClient(TelegramClient, BaseClient):
 
     def add_message_handler(self, handler):
         with_client_handler = partial(handler, self)
@@ -37,49 +37,36 @@ class TelethonClient(TelegramClient, SetAttribute):
 
     def __init__(
             self,
-            api_id: int,
-            api_hash: str,
-            in_memory: bool = False,
-            session_string: str = None,
-            phone_number: Autofill = None,
-            phone_code: Autofill = None,
-            password: Autofill = None,
-            proxy: ProxyType = None,
-            set_attr_timeout: int = 60,
-            is_pyrogram_session: bool = False,
-            is_telethon_session: bool = False,
-            app_version="TeleBridge v2",
-            device_model="Linux",
-            system_version="6.1",
+            opts: ClientOpts,
             **kwargs
     ):
-        proxy: tuple = Proxy.from_url(proxy).to_telethon_proxy() if proxy else None
+        BaseClient.__init__(self, opts=opts)
 
-        self._attribute_cache = {}
-        self._set_attr_timeout = set_attr_timeout
-        self.phone_number = phone_number
-        self.phone_code = phone_code
-        self.password = password
+        proxy: tuple = Proxy.from_url(opts.proxy).to_telethon_proxy() if opts.proxy else None
 
-        self.is_pyrogram_session = is_pyrogram_session
-        self.is_telethon_session = is_telethon_session
+        self.phone_number = opts.phone_number
+        self.phone_code = opts.phone_code
+        self.password = opts.password
 
-        if is_pyrogram_session:
-            tl_session = TeleBridgeSession.from_pyrogram_string(session_string)
-            session = StringSession(tl_session.session_string)
-        elif in_memory:
+        if opts.session_bridge:
+            session_string = opts.session_bridge.to_telethon_string()
             session = StringSession(session_string)
+        elif opts.in_memory:
+            session = MemorySession()
         else:
-            session_path = SESSIONS_DIR / f"{api_id}.session"
+            session_path = SESSIONS_DIR / f"{opts.api_id}.session"
             session = str(session_path.absolute())
+
         super().__init__(
             session,
-            api_id,
-            api_hash,
+            opts.api_id,
+            opts.api_hash,
             proxy=proxy,
-            app_version=app_version,
-            device_model=device_model,
-            system_version=system_version,
+            receive_updates=opts.receive_updates,
+
+            app_version=opts.app_version,
+            device_model=opts.device_model,
+            system_version=opts.system_version,
             **kwargs
         )
 
@@ -220,7 +207,7 @@ class TelethonClient(TelegramClient, SetAttribute):
                     errors.PhoneCodeHashEmptyError,
                     errors.PhoneCodeInvalidError):
                 print('Invalid code. Please try again.', file=sys.stderr)
-
+                await self.phone_code_error('Invalid code. Please try again.')
             attempts += 1
         else:
             raise RuntimeError(
@@ -249,6 +236,7 @@ class TelethonClient(TelegramClient, SetAttribute):
                     except errors.PasswordHashInvalidError:
                         print('Invalid password. Please try again',
                               file=sys.stderr)
+                        await self.password_error('Invalid password. Please try again')
                 else:
                     raise errors.PasswordHashInvalidError(request=None)
             else:

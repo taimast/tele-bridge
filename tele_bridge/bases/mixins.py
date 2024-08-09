@@ -14,10 +14,6 @@ Autofill: TypeAlias = Union[
 
 class SetAttribute:
 
-    # def __init__(self, set_attr_timeout: int = 60, ):
-    #     self._attribute_cache = {}
-    #     self._set_attr_timeout = set_attr_timeout
-
     _set_attr_timeout: int
     _attribute_cache: dict[str, Any]
 
