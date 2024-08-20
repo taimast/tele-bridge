@@ -7,7 +7,7 @@ from .bases.proxy import Proxy, ProxyDict, ProxyType
 from .bases.try_get import ChatGetterTry
 from .dispatcher import Dispatcher
 from .methods import Methods, CachedMethods
-from .pyro.client import Autofill, PyrogramClient
+from .pyro.client import PyrogramClient
 from .pyro.client_object import PyrogramClientInterface
 from .pyro.message import PyrogramMessageObject
 from .pyro.try_get import PyrogramChatGetterTry
