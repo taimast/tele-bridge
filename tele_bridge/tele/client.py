@@ -11,6 +11,7 @@ from telethon.sessions import StringSession, MemorySession
 from tele_bridge.bases.client import BaseClient
 from tele_bridge.bases.client_params import ClientOpts
 from tele_bridge.bases.proxy import Proxy
+from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
 
 SESSIONS_DIR = Path("sessions")
 
@@ -34,6 +35,11 @@ class TelethonClient(TelegramClient, BaseClient):
     async def restart(self):
         await self.disconnect()
         await self.connect()
+
+    async def get_telebridge_session(self) -> TeleBridgeSession:
+        session: MemorySession = self.session
+        session_string = session.save()
+        return TeleBridgeSession.from_telethon_string(session_string)
 
     def __init__(
             self,

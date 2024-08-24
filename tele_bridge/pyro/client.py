@@ -14,6 +14,7 @@ from pyrogram.utils import ainput
 from tele_bridge.bases.client import BaseClient
 from tele_bridge.bases.client_params import ClientOpts
 from tele_bridge.bases.proxy import Proxy
+from tele_bridge.sessions.tele_bridge_session import TeleBridgeSession
 
 
 class PyrogramClient(Client, BaseClient):
@@ -23,6 +24,10 @@ class PyrogramClient(Client, BaseClient):
 
     def has_handlers(self):
         return bool(self.dispatcher.groups)
+
+    async def get_telebridge_session(self) ->TeleBridgeSession:
+        session_string = await self.export_session_string()
+        return TeleBridgeSession.from_pyrogram_string(session_string)
 
     async def stop(
             self: "PyrogramClient",
