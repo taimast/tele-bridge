@@ -13,14 +13,14 @@ class ClientOpts:
     in_memory: bool = False
     receive_updates: bool = True
 
-    phone_number: str = None
-    phone_code: Autofill = None
-    password: Autofill = None
+    phone_number: str | None = None
+    phone_code: Autofill | None = None
+    password: Autofill | None = None
 
-    phone_number_error: Autofill = None
-    phone_code_error: Autofill = None
-    password_error: Autofill = None
-    proxy: str = None
+    phone_number_error: Autofill | None = None
+    phone_code_error: Autofill | None = None
+    password_error: Autofill | None = None
+    proxy: str | None = None
 
     # seconds
     set_attr_timeout: int = 60
